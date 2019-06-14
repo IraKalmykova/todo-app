@@ -1,3 +1,6 @@
+ - [Preview](https://irakalmykova.github.io/todo-app/)
+ - [PullRequest](https://github.com/IraKalmykova/fe_on_feb19/pull/1/files)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
