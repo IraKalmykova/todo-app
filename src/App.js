@@ -30,7 +30,6 @@ class App extends React.Component {
                 items: [
                   ...prevState.items,
                   {
-                    index: this.state.items.length + 1,
                     value: this.state.value,
                     done: false,
                   },
