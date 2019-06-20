@@ -1,9 +1,10 @@
 import React from 'react';
 
-const Footer = props => (
+const Footer = ({countActiveItems, showSelectedList, filterItems, filter, removeAllCompletedItems}) => (
+
   <footer className="footer">
     <span className="todo-count">
-      <strong>{props.countActiveItems.length}</strong>
+      <strong>{countActiveItems.length}</strong>
       {' '}
         item left
     </span>
@@ -11,8 +12,8 @@ const Footer = props => (
       <li>
         <a
           href="#/"
-          className={props.showSelectedList === 0 ? 'selected' : ''}
-          onClick={props.showAllItems}
+          className={showSelectedList === filter.all ? 'selected' : ''}
+          onClick={() => filterItems(filter.all)}
         >
                         All
         </a>
@@ -20,8 +21,8 @@ const Footer = props => (
       <li>
         <a
           href="#/active"
-          className={props.showSelectedList === 1 ? 'selected' : ''}
-          onClick={props.showActiveItems}
+          className={showSelectedList === filter.active ? 'selected' : ''}
+          onClick={() => filterItems(filter.active)}
         >
                         Active
         </a>
@@ -29,8 +30,8 @@ const Footer = props => (
       <li>
         <a
           href="#/completed"
-          className={props.showSelectedList === 2 ? 'selected' : ''}
-          onClick={props.showCompletedItems}
+          className={showSelectedList === filter.completed ? 'selected' : ''}
+          onClick={() => filterItems(filter.completed)}
         >
                         Completed
         </a>
@@ -39,7 +40,7 @@ const Footer = props => (
     <button
       type="button"
       className="clear-completed"
-      onClick={props.removeAllCompletedItems}
+      onClick={removeAllCompletedItems}
     >
                 Clear completed
     </button>

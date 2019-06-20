@@ -10,6 +10,7 @@ const Header = props => (
         autoFocus=""
         value={props.value}
         onChange={props.handleChange}
+
       />
     </form>
 

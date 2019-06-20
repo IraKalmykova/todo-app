@@ -11,18 +11,18 @@ const Main = props => (
     </label>
     <ul className="todo-list">
       {props.items.map(item => (
-        <li key={item.value} className={item.done ? 'completed' : ''}>
+        <li key={item.id} className={item.done ? 'completed' : ''}>
           <div className="view">
             <input
               className="toggle"
               type="checkbox"
-              onClick={() => props.handleClickToDone(item.value)}
+              onClick={() => props.handleClickToDone(item.id)}
             />
             <label>{item.value}</label>
             <button
               type="button"
               className="destroy"
-              onClick={() => props.removeCompletedItem(item.value)}
+              onClick={() => props.removeCompletedItem(item.id)}
             />
           </div>
         </li>

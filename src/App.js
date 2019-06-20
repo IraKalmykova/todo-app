@@ -4,6 +4,12 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Main from './components/Main';
 
+const FILTER = {
+  all: 0,
+  active: 1,
+  completed: 2
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -11,80 +17,92 @@ class App extends React.Component {
     this.state = {
       value: '',
       items: [],
-      selectedList: 0,
+      filterBy: FILTER.all,
       checked: false,
     };
-
-    this.addToValue = (event) => {
-      this.setState({
-        value: event.target.value,
-      });
-    };
-
-    this.addToItems = () => {
-      if (this.state.value) {
-        this.setState(prevState => ({
-          items: [
-            ...prevState.items,
-            {
-              value: this.state.value,
-              done: false,
-            },
-          ],
-
-          value: '',
-        }));
-      }
-    };
-
-    this.handleClickToDone = (value) => {
-      for (const key of this.state.items) {
-        if (key.value === value) {
-          key.done = !key.done;
-        }
-      }
-
-      this.setState({
-        items: this.state.items,
-
-      });
-    };
-
-    this.showAllItems = () => {
-      this.setState({ selectedList: 0 });
-    };
-
-    this.showActiveItems = () => {
-      this.setState({ selectedList: 1 });
-    };
-
-    this.showCompletedItems = () => {
-      this.setState({ selectedList: 2 });
-    };
-
-    this.removeAllCompletedItems = () => {
-      const items = this.state.items.filter(item => !item.done);
-      this.setState({ items });
-    };
-
-    this.removeCompletedItem = (value) => {
-      const newValue = this.state.items.filter(item => item.value !== value);
-
-      this.setState({ items: newValue });
-    };
-
-    this.checkedAllItems = () => {
-      for (const key of this.state.items) {
-        key.done = !this.state.checked;
-      }
-
-      this.state.checked = !this.state.checked;
-      this.setState({
-        items: this.state.items,
-        checked: this.state.checked,
-      });
-    };
   }
+
+  addToValue = (event) => {
+    this.setState({
+      value: event.target.value,
+    });
+  };
+
+  addToItems = (event) => {
+    event.preventDefault();
+
+    if (!this.state.value) {
+      return;
+    }
+
+    this.setState(prevState => ({
+      items: [
+        ...prevState.items,
+        {
+          id: Date.now(),
+          value: this.state.value,
+          done: false,
+        },
+      ],
+      value: '',
+    }))
+  };
+
+  handleClickToDone = (id) => {
+    const items = [...this.state.items];
+    const itemIndex = items.findIndex(item => item.id === id);
+
+    items[itemIndex] = {
+      ...items[itemIndex],
+      done: !items[itemIndex].done
+    }
+    this.setState({items});
+  };
+
+  changeFilterBy = (filter) => {
+    this.setState({ filterBy: filter })
+  };
+
+  filterItems(value) {
+    // we've already renamed `selectedList` to `filterBy`
+    switch (value) {
+      case FILTER.all: {
+        return this.state.items;
+      }
+      case FILTER.active: {
+        return this.state.items.filter((item) => !item.done);
+      }
+      case FILTER.completed: {
+        return this.state.items.filter((item) => item.done);
+      }
+      default: {
+        return this.state.items;
+      }
+    }
+  }
+
+  removeAllCompletedItems = () => {
+    const items = this.state.items.filter(item => !item.done);
+    this.setState({ items });
+  };
+
+  removeCompletedItem = (id) => {
+    const items = this.state.items.filter(item => item.id !== id);
+
+    this.setState({ items });
+  };
+
+  checkedAllItems = () => {
+    const items = this.state.items.map((item) =>({
+      ...item,
+      done: !this.state.checked,
+    }))
+
+    this.setState({
+      items,
+      checked: !this.state.checked,
+    });
+  };
 
   render() {
     return (
@@ -95,22 +113,17 @@ class App extends React.Component {
           handleSubmit={this.addToItems}
         />
         <Main
-          items={this.state.selectedList === 0
-            ? this.state.items
-            : this.state.selectedList === 1
-              ? this.state.items.filter(item => !item.done)
-              : this.state.items.filter(item => item.done)}
+          items={this.filterItems(this.state.filterBy)}
           handleClickToDone={this.handleClickToDone}
           checkedAllItems={this.checkedAllItems}
           removeCompletedItem={this.removeCompletedItem}
         />
         <Footer
           countActiveItems={this.state.items.filter(item => !item.done)}
-          showAllItems={this.showAllItems}
-          showActiveItems={this.showActiveItems}
-          showCompletedItems={this.showCompletedItems}
+          filter={FILTER}
+          filterItems={this.changeFilterBy}
           removeAllCompletedItems={this.removeAllCompletedItems}
-          showSelectedList={this.state.selectedList}
+          showSelectedList={this.state.filterBy}
         />
       </section>
     );
