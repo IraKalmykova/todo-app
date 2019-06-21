@@ -16,6 +16,7 @@ const Main = props => (
             <input
               className="toggle"
               type="checkbox"
+              checked={item.done}
               onClick={() => props.handleClickToDone(item.id)}
             />
             <label>{item.value}</label>

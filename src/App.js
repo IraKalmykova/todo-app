@@ -56,7 +56,9 @@ class App extends React.Component {
       ...items[itemIndex],
       done: !items[itemIndex].done
     }
-    this.setState({items});
+    this.setState({
+      items
+    });
   };
 
   changeFilterBy = (filter) => {
@@ -64,7 +66,6 @@ class App extends React.Component {
   };
 
   filterItems(value) {
-    // we've already renamed `selectedList` to `filterBy`
     switch (value) {
       case FILTER.all: {
         return this.state.items;
@@ -114,6 +115,7 @@ class App extends React.Component {
         />
         <Main
           items={this.filterItems(this.state.filterBy)}
+          checked={this.state.checked}
           handleClickToDone={this.handleClickToDone}
           checkedAllItems={this.checkedAllItems}
           removeCompletedItem={this.removeCompletedItem}
