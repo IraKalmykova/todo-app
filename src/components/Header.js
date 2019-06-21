@@ -3,7 +3,7 @@ import React from 'react';
 const Header = props => (
   <header className="header">
     <h1>todos</h1>
-    <form onSubmit={props.handleSubmit}>
+    <form className="header-form" onSubmit={props.handleSubmit}>
       <input
         className="new-todo"
         placeholder="What needs to be done?"
